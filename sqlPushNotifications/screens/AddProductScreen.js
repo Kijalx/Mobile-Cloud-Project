@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, TextInput, Button, StyleSheet, Alert } from 'react-native';
+import { NEWSHOPURL } from '@env';
 const AddProductScreen = ({ navigation }) => {
     const [name, setName] = useState('');
     const [price, setPrice] = useState('');
@@ -11,7 +12,7 @@ const AddProductScreen = ({ navigation }) => {
         }
 
         try {
-            const response = await fetch(`https://727e-2001-bb6-623d-9100-8930-b1eb-916e-6e18.ngrok-free.app/product/add`, {
+            const response = await fetch(`${NEWSHOPURL}/product/add`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -28,7 +29,7 @@ const AddProductScreen = ({ navigation }) => {
                 Alert.alert('Success', 'Product added successfully!');
                 setName('');
                 setPrice('');
-                navigation.navigate('Main'); // Navigate back to the Main screen
+                navigation.navigate('Main');
             } else {
                 throw new Error(responseData.message || 'Could not add the product.');
             }

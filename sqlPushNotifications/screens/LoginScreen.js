@@ -1,15 +1,15 @@
 import React, { useState, useContext } from 'react';
 import { View, TextInput, Button, StyleSheet } from 'react-native';
-import { AuthContext } from '../auth/AuthContext'; // Update the import statement
-
+import { AuthContext } from '../auth/AuthContext';
+import { NEWSHOPURL } from '@env';
 const LoginScreen = ({ navigation }) => {
-    const { login, admin } = useContext(AuthContext); // Accessing login and admin functions from context
+    const { login, admin } = useContext(AuthContext);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
     const handleLogin = async () => {
         try {
-            const response = await fetch('https://727e-2001-bb6-623d-9100-8930-b1eb-916e-6e18.ngrok-free.app/user/login', {
+            const response = await fetch(`${NEWSHOPURL}/user/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -17,14 +17,13 @@ const LoginScreen = ({ navigation }) => {
                 body: JSON.stringify({ username, password }),
             });
             if (response.ok) {
-                const userData = await response.json(); // Parse response data
-                login(); // Set isLoggedIn to true
+                const userData = await response.json();
+                login();
                 if (userData.isAdmin) {
-                    admin(true); // Set isAdmin status if the user is an admin
+                    admin(true);
                 }
-                navigation.navigate('Main'); // Navigate to MainScreen or any other screen after successful login
+                navigation.navigate('Main');
             } else {
-                // Handle unsuccessful login
                 console.error('Login failed');
             }
         } catch (error) {

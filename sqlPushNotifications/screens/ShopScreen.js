@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
-import { SHOPURL } from '@env';
+import { NEWSHOPURL } from '@env';
 const ShopScreen = ({ navigation }) => {
     const [products, setProducts] = useState([]);
 
     const fetchProducts = async () => {
         try {
-            const response = await fetch(`https://727e-2001-bb6-623d-9100-8930-b1eb-916e-6e18.ngrok-free.app/getShop`);
+            const response = await fetch(`${NEWSHOPURL}/getShop`);
             const data = await response.json();
             setProducts(data);
         } catch (error) {
@@ -16,12 +16,12 @@ const ShopScreen = ({ navigation }) => {
     };
 
     useEffect(() => {
-        fetchProducts(); // Fetch products when the component mounts
+        fetchProducts();
     }, []);
 
     useFocusEffect(
         React.useCallback(() => {
-            fetchProducts(); // Fetch products when the screen comes into focus
+            fetchProducts();
         }, [])
     );
 

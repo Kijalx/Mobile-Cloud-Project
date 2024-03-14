@@ -1,36 +1,34 @@
 import React, { useState } from 'react';
 import { View, TextInput, Button, StyleSheet, Alert } from 'react-native';
-import { SHOPURL } from '@env';
+import { NEWSHOPURL } from '@env';
 const UpdateProductScreen = ({ route, navigation }) => {
-    const { productId, productName, productPrice } = route.params; // Get the parameters from the route params
-    const [name, setName] = useState(productName); // Set initial state with product name
-    const [price, setPrice] = useState(productPrice.toString()); // Set initial state with product price
+    const { productId, productName, productPrice } = route.params;
+    const [name, setName] = useState(productName);
+    const [price, setPrice] = useState(productPrice.toString());
 
     const updateProductHandler = async () => {
-        // Input validation
         if (!name.trim() || !price) {
             Alert.alert('Invalid input', 'Please enter a valid name and price.');
             return;
         }
 
         try {
-            const response = await fetch(`https://727e-2001-bb6-623d-9100-8930-b1eb-916e-6e18.ngrok-free.app/product/update/${productId}`, {
+            const response = await fetch(`${NEWSHOPURL}/product/update/${productId}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
                     name: name,
-                    price: parseFloat(price), // Convert price to float
+                    price: parseFloat(price),
                 }),
             });
 
             const responseData = await response.json();
             if (!response.ok) {
-                // Handle response errors
                 throw new Error(responseData.message || 'Could not update the product.');
             }
-            navigation.navigate('Shop'); // Navigate back to the "Shop" screen after successful update
+            navigation.navigate('Shop');
             Alert.alert('Success', 'Product updated successfully!');
 
         } catch (error) {

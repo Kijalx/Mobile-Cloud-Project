@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, Button, StyleSheet, TouchableOpacity } from 'react-native';
-
+import { NEWSHOPURL } from '@env';
 const AdminScreen = ({ navigation }) => {
     const [users, setUsers] = useState([]);
 
@@ -10,7 +10,7 @@ const AdminScreen = ({ navigation }) => {
 
     const fetchUsers = async () => {
         try {
-            const response = await fetch('https://727e-2001-bb6-623d-9100-8930-b1eb-916e-6e18.ngrok-free.app/getUsers'); // Replace with your actual endpoint
+            const response = await fetch(`${NEWSHOPURL}/getUsers`);
             const data = await response.json();
             if (!response.ok) {
                 throw new Error(data.message || 'Could not fetch users.');
@@ -23,19 +23,18 @@ const AdminScreen = ({ navigation }) => {
 
     const changeUserRole = async (userId, newRole) => {
         try {
-            const response = await fetch(`https://727e-2001-bb6-623d-9100-8930-b1eb-916e-6e18.ngrok-free.app/changeRole/${userId}`, {
+            const response = await fetch(`${NEWSHOPURL}/changeRole/${userId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ isAdmin: newRole }), // Sending isAdmin instead of role
+                body: JSON.stringify({ isAdmin: newRole }),
             });
             console.log(response)
             if (!response.ok) {
                 const errorData = await response.json();
                 throw new Error(errorData.message || 'Failed to update user role.');
             }
-            // If successful, update users state to reflect the new role
             setUsers(prevUsers => prevUsers.map(user => user._id === userId ? { ...user, isAdmin: newRole } : user));
         } catch (error) {
             console.error(error);
