@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, TextInput, Button, StyleSheet, Alert } from 'react-native';
-import { NEWSHOPURL } from '@env';
+import { NEWNEWSHOPURL } from '@env';
 const AddProductScreen = ({ navigation }) => {
     const [name, setName] = useState('');
     const [price, setPrice] = useState('');
@@ -12,7 +12,7 @@ const AddProductScreen = ({ navigation }) => {
         }
 
         try {
-            const response = await fetch(`${NEWSHOPURL}/product/add`, {
+            const response = await fetch(`${NEWNEWSHOPURL}/product/add`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

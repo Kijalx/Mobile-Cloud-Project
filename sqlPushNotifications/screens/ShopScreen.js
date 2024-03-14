@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
-import { NEWSHOPURL } from '@env';
+import { NEWNEWSHOPURL } from '@env';
 const ShopScreen = ({ navigation }) => {
     const [products, setProducts] = useState([]);
 
     const fetchProducts = async () => {
         try {
-            const response = await fetch(`${NEWSHOPURL}/getShop`);
+            const response = await fetch(`${NEWNEWSHOPURL}/getShop`);
             const data = await response.json();
             setProducts(data);
         } catch (error) {

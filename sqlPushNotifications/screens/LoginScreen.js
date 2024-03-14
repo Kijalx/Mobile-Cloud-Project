@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { View, TextInput, Button, StyleSheet } from 'react-native';
 import { AuthContext } from '../auth/AuthContext';
-import { NEWSHOPURL } from '@env';
+import { NEWNEWSHOPURL } from '@env';
 const LoginScreen = ({ navigation }) => {
     const { login, admin } = useContext(AuthContext);
     const [username, setUsername] = useState('');
@@ -9,7 +9,7 @@ const LoginScreen = ({ navigation }) => {
 
     const handleLogin = async () => {
         try {
-            const response = await fetch(`${NEWSHOPURL}/user/login`, {
+            const response = await fetch(`${NEWNEWSHOPURL}/user/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
