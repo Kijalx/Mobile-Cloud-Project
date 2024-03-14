@@ -23,7 +23,7 @@ const AdminScreen = ({ navigation }) => {
 
     const changeUserRole = async (userId, newRole) => {
         try {
-            const response = await fetch(`${NEWSHOPURL}/changeRole/${userId}`, {
+            const response = await fetch(`${NEWNEWSHOPURL}/changeRole/${userId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
