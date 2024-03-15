@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity, Image, Button, Alert } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
-import { ABC } from '@env'; // Make sure this is the correct URL to your backend
+import { NEWNEWSHOPURL } from '@env'; // Make sure this is the correct URL to your backend
 
 const ShopScreen = ({ navigation }) => {
     const [products, setProducts] = useState([]);
@@ -20,7 +20,7 @@ const ShopScreen = ({ navigation }) => {
 
     const fetchProducts = async () => {
         try {
-            const response = await fetch(`${ABC}/getShop`);
+            const response = await fetch(`${NEWNEWSHOPURL}/getShop`);
             const data = await response.json();
             console.log("Fetched products:", data); // Debug: Log fetched products to ensure they're being retrieved
             // Replace backslashes with forward slashes in image URLs
@@ -84,7 +84,7 @@ const ShopScreen = ({ navigation }) => {
         try {
             await Promise.all(
                 selectedProducts.map(async productId => {
-                    const response = await fetch(`${ABC}/product/delete/${productId}`, {
+                    const response = await fetch(`${NEWNEWSHOPURL}/product/delete/${productId}`, {
                         method: 'POST',
                     });
                     if (!response.ok) {
@@ -125,7 +125,7 @@ const ShopScreen = ({ navigation }) => {
                         </View>
                         {item.image && (
                             <Image
-                                source={{ uri: `${ABC}/${item.image}` }}
+                                source={{ uri: `${NEWNEWSHOPURL}/${item.image}` }}
                                 style={styles.productImage}
                                 resizeMode='contain'
                             />

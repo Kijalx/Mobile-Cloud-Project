@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, TextInput, Button, StyleSheet, Alert, TouchableOpacity, Text, Image, Platform } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import { ABC } from '@env'; // Make sure ABC is your actual backend endpoint
+import { NEWNEWSHOPURL } from '@env'; // Make sure NEWNEWSHOPURL is your actual backend endpoint
 
 const AddProductScreen = ({ navigation }) => {
     const [name, setName] = useState('');
@@ -47,7 +47,7 @@ const AddProductScreen = ({ navigation }) => {
         });
 
         try {
-            const response = await fetch(`${ABC}/product/add`, {
+            const response = await fetch(`${NEWNEWSHOPURL}/product/add`, {
                 method: 'POST',
                 headers: {
                     // Don't set 'Content-Type' here, let the browser set it with the correct boundary
