@@ -1,36 +1,13 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, StyleSheet, Alert, Image } from 'react-native';
-import * as ImagePicker from 'expo-image-picker'; // Import Expo ImagePicker
+import { View, TextInput, Button, StyleSheet, Alert } from 'react-native';
 import { NEWNEWSHOPURL } from '@env';
-
 const AddProductScreen = ({ navigation }) => {
     const [name, setName] = useState('');
     const [price, setPrice] = useState('');
-    const [image, setImage] = useState(null);
-
-    const pickImage = async () => {
-        const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
-        if (!permissionResult.granted) {
-            Alert.alert('Permission required', 'Permission to access camera roll is required!');
-            return;
-        }
-
-        const result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            quality: 1, // Adjust based on your needs
-        });
-
-        console.log('ImagePicker Result:', result); // Debugging: log the entire result
-
-        if (!result.cancelled && result.assets && result.assets.length > 0) {
-            setImage({ uri: result.assets[0].uri });
-            console.log('Selected image URI:', result.assets[0].uri); // Double-checking URI
-        }
-    };
 
     const addProductHandler = async () => {
-        if (!name.trim() || !price || !image) {
-            Alert.alert('Invalid input', 'Please enter a valid name, price, and select an image.');
+        if (!name.trim() || !price) {
+            Alert.alert('Invalid input', 'Please enter a valid name and price.');
             return;
         }
 
@@ -42,18 +19,17 @@ const AddProductScreen = ({ navigation }) => {
                 },
                 body: JSON.stringify({
                     name: name,
-                    price: price,
-                    image: image.uri,
+                    price: parseFloat(price),
                 }),
             });
 
             const responseData = await response.json();
+            console.log(responseData);
             if (response.ok) {
                 Alert.alert('Success', 'Product added successfully!');
                 setName('');
                 setPrice('');
-                setImage(null); // Clear image
-                navigation.navigate('Main'); // Navigate back
+                navigation.navigate('Main');
             } else {
                 throw new Error(responseData.message || 'Could not add the product.');
             }
@@ -65,24 +41,18 @@ const AddProductScreen = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <TextInput
-                placeholder="Enter product name"
+                placeholder="Name"
                 value={name}
                 onChangeText={text => setName(text)}
                 style={styles.input}
-                placeholderTextColor="#888"
             />
             <TextInput
-                placeholder="Enter price"
+                placeholder="Price"
                 value={price}
                 onChangeText={text => setPrice(text)}
                 keyboardType="numeric"
                 style={styles.input}
-                placeholderTextColor="#888"
             />
-            <Button title="Pick an image" onPress={pickImage} />
-            {image && (
-                <Image source={{ uri: image.uri }} style={styles.image} />
-            )}
             <Button title="Add Product" onPress={addProductHandler} />
         </View>
     );
@@ -101,12 +71,6 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#ccc',
         padding: 10,
-    },
-    image: {
-        width: 200,
-        height: 200,
-        resizeMode: 'contain',
-        marginVertical: 10,
     },
 });
 
