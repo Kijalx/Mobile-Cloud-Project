@@ -7,6 +7,11 @@ import { ABC } from '@env';
 const MainScreen = ({ navigation }) => {
     const { isLoggedIn, isAdmin } = useContext(AuthContext);
 
+    // Function to navigate to the menu screen
+    const goToMenu = () => {
+        navigation.navigate('Menu');
+    };
+
     return (
         <View style={styles.container}>
             <Text style={styles.urlText}>{`URL: ${NEWNEWSHOPURL}`}</Text>
@@ -25,6 +30,14 @@ const MainScreen = ({ navigation }) => {
         </View>
     );
 };
+
+// Navigation options for MainScreen
+MainScreen.navigationOptions = ({ navigation }) => ({
+    headerTitle: 'Main Menu', // Title for the header
+    headerRight: () => (
+        <Button onPress={() => navigation.navigate('Menu')} title="Menu" />
+    ),
+});
 
 const styles = StyleSheet.create({
     container: {
