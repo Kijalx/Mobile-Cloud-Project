@@ -24,12 +24,32 @@ router.get("/addProduct", (req, res) => {
 });
 
 router.post("/product/add", (req, res) => {
-    const { name, price, image } = req.body;
-    let imagePath = ""; // Define logic to handle and store the base64 image
-    new Product({ name, price, imageUrl: imagePath })
-        .save()
-        .then(product => res.json(product))
-        .catch(err => res.status(500).send("Failed to add product"));
+    const { name, price, imageUrl } = req.body;
+
+    // Assuming the image data is sent as a base64 string
+    // Save the image to a file and store the file path in the database
+    if (req.body.image) {
+        const base64Image = req.body.image;
+        const imageName = `${Date.now()}.png`; // Generate a unique name for the image
+        const imagePath = path.join(__dirname, '..', 'uploads', imageName); // Define the path where the image will be saved
+        fs.writeFile(imagePath, base64Image, 'base64', (err) => {
+            if (err) {
+                console.error('Error saving image:', err);
+                return res.status(500).send('Failed to save image');
+            }
+            // Image saved successfully, update the imageUrl field in the database
+            new Product({ name, price, imageUrl: imageName })
+                .save()
+                .then(product => res.json(product))
+                .catch(err => res.status(500).send("Failed to add product"));
+        });
+    } else {
+        // If no image is provided, simply save the product without imageUrl
+        new Product({ name, price })
+            .save()
+            .then(product => res.json(product))
+            .catch(err => res.status(500).send("Failed to add product"));
+    }
 });
 
 router.get("/", (req, res) => {

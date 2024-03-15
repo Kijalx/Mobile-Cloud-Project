@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, TextInput, Button, StyleSheet, Alert, Image } from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
+import * as ImagePicker from 'expo-image-picker'; // Import Expo ImagePicker
 import { NEWNEWSHOPURL } from '@env';
 
 const AddProductScreen = ({ navigation }) => {
@@ -17,18 +17,20 @@ const AddProductScreen = ({ navigation }) => {
 
         const result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            quality: 0.5, // Consider reducing quality to reduce base64 size
-            base64: true,
+            quality: 1, // Adjust based on your needs
         });
 
-        if (!result.cancelled) {
-            setImage({ uri: result.uri, base64: result.base64 });
+        console.log('ImagePicker Result:', result); // Debugging: log the entire result
+
+        if (!result.cancelled && result.assets && result.assets.length > 0) {
+            setImage({ uri: result.assets[0].uri });
+            console.log('Selected image URI:', result.assets[0].uri); // Double-checking URI
         }
     };
 
     const addProductHandler = async () => {
-        if (!name.trim() || !price) {
-            Alert.alert('Invalid input', 'Please enter a valid name and price.');
+        if (!name.trim() || !price || !image) {
+            Alert.alert('Invalid input', 'Please enter a valid name, price, and select an image.');
             return;
         }
 
@@ -41,7 +43,7 @@ const AddProductScreen = ({ navigation }) => {
                 body: JSON.stringify({
                     name: name,
                     price: price,
-                    image: image ? `data:image/jpeg;base64,${image.base64}` : null,
+                    image: image.uri,
                 }),
             });
 
@@ -50,8 +52,8 @@ const AddProductScreen = ({ navigation }) => {
                 Alert.alert('Success', 'Product added successfully!');
                 setName('');
                 setPrice('');
-                setImage(null); // Clear image after successful upload
-                navigation.navigate('Main');
+                setImage(null); // Clear image
+                navigation.navigate('Main'); // Navigate back
             } else {
                 throw new Error(responseData.message || 'Could not add the product.');
             }
