@@ -17,7 +17,12 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "This app uses the camera to allow you to take and upload photos of products.",
+        "NSPhotoLibraryUsageDescription": "This app needs access to your photo library for selecting and uploading product images.",
+        "NSPhotoLibraryAddUsageDescription": "This app needs permission to save photos to your photo library."
+      }
     },
     "android": {
       "adaptiveIcon": {
