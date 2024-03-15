@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { View, Button, Text, StyleSheet } from 'react-native';
 import { AuthContext } from '../auth/AuthContext';
 import { NEWNEWSHOPURL } from '@env';
-import { TESTURL } from '@env';
+import { ABC } from '@env';
 
 const MainScreen = ({ navigation }) => {
     const { isLoggedIn, isAdmin } = useContext(AuthContext);
@@ -10,7 +10,7 @@ const MainScreen = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <Text style={styles.urlText}>{`URL: ${NEWNEWSHOPURL}`}</Text>
-            <Text style={styles.urlText}>{`TESTURL: ${TESTURL}`}</Text>
+            <Text style={styles.urlText}>{`ABC: ${ABC}`}</Text>
             <Button title="Shop" onPress={() => navigation.navigate('Shop')} />
             <Button title="Add Product" onPress={() => navigation.navigate('AddProduct')} />
             {!isLoggedIn ? ( // Display Sign Up and Login buttons if not logged in

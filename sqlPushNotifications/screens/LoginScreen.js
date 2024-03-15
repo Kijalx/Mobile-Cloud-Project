@@ -1,7 +1,8 @@
 import React, { useState, useContext } from 'react';
-import { View, TextInput, Button, StyleSheet } from 'react-native';
+import { View, TextInput, Button, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { AuthContext } from '../auth/AuthContext';
-import { NEWNEWSHOPURL } from '@env';
+import { ABC } from '@env';
+
 const LoginScreen = ({ navigation }) => {
     const { login, admin } = useContext(AuthContext);
     const [username, setUsername] = useState('');
@@ -9,7 +10,7 @@ const LoginScreen = ({ navigation }) => {
 
     const handleLogin = async () => {
         try {
-            const response = await fetch(`${NEWNEWSHOPURL}/user/login`, {
+            const response = await fetch(`${ABC}/user/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -31,22 +32,31 @@ const LoginScreen = ({ navigation }) => {
         }
     };
 
+    const handleForgotPassword = () => {
+        navigation.navigate('ForgotPassword');
+    };
+
     return (
         <View style={styles.container}>
             <TextInput
                 style={styles.input}
                 placeholder="Username"
+                placeholderTextColor="#888"
                 onChangeText={text => setUsername(text)}
                 value={username}
             />
             <TextInput
                 style={styles.input}
                 placeholder="Password"
+                placeholderTextColor="#888"
                 onChangeText={text => setPassword(text)}
                 value={password}
                 secureTextEntry
             />
             <Button title="Login" onPress={handleLogin} />
+            <TouchableOpacity onPress={handleForgotPassword}>
+                <Text style={styles.forgotPassword}>Forgot Password?</Text>
+            </TouchableOpacity>
         </View>
     );
 };
@@ -61,8 +71,13 @@ const styles = StyleSheet.create({
         width: '80%',
         marginBottom: 10,
         padding: 10,
-        borderBottomWidth: 1,
-        borderBottomColor: '#ccc',
+        borderWidth: 1,
+        borderColor: '#ccc',
+        color: '#000', // Text color
+    },
+    forgotPassword: {
+        marginTop: 10,
+        color: 'blue',
     },
 });
 

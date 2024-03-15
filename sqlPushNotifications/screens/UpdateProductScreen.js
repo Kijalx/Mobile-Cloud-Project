@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, TextInput, Button, StyleSheet, Alert } from 'react-native';
-import { NEWNEWSHOPURL } from '@env';
+import { ABC } from '@env';
+
 const UpdateProductScreen = ({ route, navigation }) => {
     const { productId, productName, productPrice } = route.params;
     const [name, setName] = useState(productName);
@@ -13,7 +14,7 @@ const UpdateProductScreen = ({ route, navigation }) => {
         }
 
         try {
-            const response = await fetch(`${NEWNEWSHOPURL}/product/update/${productId}`, {
+            const response = await fetch(`${ABC}/product/update/${productId}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -30,7 +31,22 @@ const UpdateProductScreen = ({ route, navigation }) => {
             }
             navigation.navigate('Shop');
             Alert.alert('Success', 'Product updated successfully!');
+        } catch (error) {
+            Alert.alert('An error occurred', error.toString());
+        }
+    };
 
+    const deleteProductHandler = async () => {
+        try {
+            const response = await fetch(`${ABC}/product/delete/${productId}`, {
+                method: 'POST',
+            });
+
+            if (!response.ok) {
+                throw new Error('Could not delete the product.');
+            }
+            navigation.navigate('Shop');
+            Alert.alert('Success', 'Product deleted successfully!');
         } catch (error) {
             Alert.alert('An error occurred', error.toString());
         }
@@ -52,6 +68,7 @@ const UpdateProductScreen = ({ route, navigation }) => {
                 style={styles.input}
             />
             <Button title="Update Product" onPress={updateProductHandler} />
+            <Button title="Delete Product" onPress={deleteProductHandler} color="red" />
         </View>
     );
 };

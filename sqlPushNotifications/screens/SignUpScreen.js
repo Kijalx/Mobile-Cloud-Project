@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, TextInput, Button, StyleSheet, Alert } from 'react-native';
-import { NEWNEWSHOPURL } from '@env';
+import { ABC } from '@env';
 const SignUpScreen = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -12,7 +12,7 @@ const SignUpScreen = ({ navigation }) => {
         }
 
         try {
-            const response = await fetch(`${NEWNEWSHOPURL}/user/signup`, {
+            const response = await fetch(`${ABC}/user/signup`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -38,7 +38,8 @@ const SignUpScreen = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <TextInput
-                placeholder="Email"
+                placeholder="Username"
+                placeholderTextColor="#888"
                 value={email}
                 onChangeText={text => setEmail(text)}
                 style={styles.input}
@@ -46,6 +47,7 @@ const SignUpScreen = ({ navigation }) => {
             />
             <TextInput
                 placeholder="Password"
+                placeholderTextColor="#888"
                 value={password}
                 onChangeText={text => setPassword(text)}
                 style={styles.input}

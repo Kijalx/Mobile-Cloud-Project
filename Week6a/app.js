@@ -10,10 +10,12 @@ const signupRoutes = require('./routes/signup');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
-
+const uploadsDirectory = path.join(__dirname, 'uploads');
 app.use('/', shopRoutes);
 app.use('/', signupRoutes);
-
+app.use('/uploads', express.static(uploadsDirectory));
+app.use(express.json({ limit: '100mb' })); // For built-in parser
+app.use(bodyParser.json({ limit: '100mb' }));
 app.use((req, res, next) => {
     //  res.status(404).render('404', { pageTitle: 'Page Not Found' });
 });
