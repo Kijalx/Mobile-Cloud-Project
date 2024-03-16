@@ -6,7 +6,6 @@ import { NEWNEWSHOPURL } from '@env'; // Make sure this is the correct URL to yo
 const ShopScreen = ({ navigation }) => {
     const [products, setProducts] = useState([]);
     const [selectedProducts, setSelectedProducts] = useState([]);
-    const [longPressIndex, setLongPressIndex] = useState(null); // Index of the product that was long-pressed
 
     useEffect(() => {
         fetchProducts();
@@ -34,9 +33,6 @@ const ShopScreen = ({ navigation }) => {
                 return item;
             });
             setProducts(modifiedData);
-            // Clear selected products and long press index on fetch
-            setSelectedProducts([]);
-            setLongPressIndex(null);
         } catch (error) {
             console.error('Error fetching products:', error);
         }
@@ -52,27 +48,8 @@ const ShopScreen = ({ navigation }) => {
         });
     };
 
-    const handleProductPress = index => {
-        if (longPressIndex !== null) {
-            // If a product is long-pressed, toggle selection of pressed product
-            toggleProductSelection(index);
-        } else {
-            // If no product is long-pressed, navigate to update product screen
-            const { _id, name, price } = products[index];
-            navigation.navigate('UpdateProduct', { productId: _id, productName: name, productPrice: price });
-        }
-    };
-
-    const handleProductLongPress = index => {
-        // Set long press index and toggle selection of long-pressed product
-        setLongPressIndex(index);
-        toggleProductSelection(index);
-    };
-
-    const cancelSelection = () => {
-        // Clear selected products and long press index on cancel
-        setSelectedProducts([]);
-        setLongPressIndex(null);
+    const navigateToUpdateProduct = (productId, productName, productPrice) => {
+        navigation.navigate('UpdateProduct', { productId, productName, productPrice });
     };
 
     const deleteSelectedProducts = async () => {
@@ -94,45 +71,51 @@ const ShopScreen = ({ navigation }) => {
             );
             fetchProducts();
             setSelectedProducts([]);
-            setLongPressIndex(null);
             Alert.alert('Success', 'Selected products deleted successfully!');
         } catch (error) {
             Alert.alert('Error', `Failed to delete selected products: ${error.message}`);
         }
     };
 
+    const renderProductItem = ({ item }) => {
+        const isSelected = selectedProducts.includes(item._id);
+        return (
+            <TouchableOpacity
+                style={styles.productItem}
+                onPress={() => navigateToUpdateProduct(item._id, item.name, item.price)}
+                onLongPress={() => toggleProductSelection(item._id)}
+            >
+                <View style={styles.productInfo}>
+                    <Text style={styles.productName}>{item.name}</Text>
+                    <Text style={styles.productPrice}>${item.price}</Text>
+                </View>
+                {item.image && (
+                    <Image
+                        source={{ uri: `${NEWNEWSHOPURL}/${item.image}` }}
+                        style={styles.productImage}
+                        resizeMode='contain'
+                    />
+                )}
+                {isSelected && (
+                    <View style={styles.selectedIndicator} />
+                )}
+            </TouchableOpacity>
+        );
+    };
+
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                {selectedProducts.length > 0 && (
-                    <Button title="Delete Selected" onPress={deleteSelectedProducts} />
-                )}
-                {selectedProducts.length > 0 && (
-                    <Button title="Cancel" onPress={cancelSelection} />
-                )}
+                <Button
+                    title="Delete Selected"
+                    onPress={deleteSelectedProducts}
+                    disabled={selectedProducts.length === 0}
+                />
             </View>
             <FlatList
                 data={products}
-                renderItem={({ item, index }) => (
-                    <TouchableOpacity
-                        style={styles.productItem}
-                        onPress={() => handleProductPress(index)}
-                        onLongPress={() => handleProductLongPress(index)}
-                    >
-                        <View style={styles.productInfo}>
-                            <Text style={styles.productName}>{item.name}</Text>
-                            <Text style={styles.productPrice}>${item.price}</Text>
-                        </View>
-                        {item.image && (
-                            <Image
-                                source={{ uri: `${NEWNEWSHOPURL}/${item.image}` }}
-                                style={styles.productImage}
-                                resizeMode='contain'
-                            />
-                        )}
-                    </TouchableOpacity>
-                )}
-                keyExtractor={(_, index) => index.toString()} // Use index as key
+                renderItem={renderProductItem}
+                keyExtractor={item => item._id.toString()} // Ensure _id is a string
             />
         </View>
     );
@@ -145,8 +128,6 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     header: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
         marginBottom: 10,
     },
     productItem: {
@@ -157,6 +138,7 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderBottomColor: '#ccc',
         width: '100%', // Ensure item occupies full width
+        position: 'relative', // Needed for absolute positioning of selected indicator
     },
     productInfo: {
         flex: 1, // Make sure text doesn't overlap with the image
@@ -172,6 +154,14 @@ const styles = StyleSheet.create({
         width: 100, // Set fixed size for the image for uniformity
         height: 100, // You can adjust width and height as needed
         marginLeft: 10, // Add some margin between text and image
+    },
+    selectedIndicator: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        bottom: 0,
+        backgroundColor: 'rgba(0, 0, 0, 0.3)',
+        width: 5,
     },
 });
 
