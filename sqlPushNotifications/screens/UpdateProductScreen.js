@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, TextInput, Button, StyleSheet, Alert } from 'react-native';
-import { NEWNEWSHOPURL } from '@env';
+import { NEWNEWNEWSHOPURL } from '@env';
 
 const UpdateProductScreen = ({ route, navigation }) => {
     const { productId, productName, productPrice } = route.params;
@@ -14,7 +14,7 @@ const UpdateProductScreen = ({ route, navigation }) => {
         }
 
         try {
-            const response = await fetch(`${NEWNEWSHOPURL}/product/update/${productId}`, {
+            const response = await fetch(`${NEWNEWNEWSHOPURL}/product/update/${productId}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -38,7 +38,7 @@ const UpdateProductScreen = ({ route, navigation }) => {
 
     const deleteProductHandler = async () => {
         try {
-            const response = await fetch(`${NEWNEWSHOPURL}/product/delete/${productId}`, {
+            const response = await fetch(`${NEWNEWNEWSHOPURL}/product/delete/${productId}`, {
                 method: 'POST',
             });
 

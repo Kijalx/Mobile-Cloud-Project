@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { View, TextInput, Button, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { AuthContext } from '../auth/AuthContext';
-import { NEWNEWSHOPURL } from '@env';
+import { NEWNEWNEWSHOPURL } from '@env';
 
 const LoginScreen = ({ navigation }) => {
     const { login, admin } = useContext(AuthContext);
@@ -10,7 +10,7 @@ const LoginScreen = ({ navigation }) => {
 
     const handleLogin = async () => {
         try {
-            const response = await fetch(`${NEWNEWSHOPURL}/user/login`, {
+            const response = await fetch(`${NEWNEWNEWSHOPURL}/user/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
         padding: 10,
         borderWidth: 1,
         borderColor: '#ccc',
-        color: '#000', // Text color
+        color: '#000',
     },
     forgotPassword: {
         marginTop: 10,

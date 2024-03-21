@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, TextInput, Button, StyleSheet, Alert, TouchableOpacity, Text, Image, Platform } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import { NEWNEWSHOPURL } from '@env'; // Make sure NEWNEWSHOPURL is your actual backend endpoint
+import { NEWNEWNEWSHOPURL } from '@env';
 
 const AddProductScreen = ({ navigation }) => {
     const [name, setName] = useState('');
@@ -11,9 +11,9 @@ const AddProductScreen = ({ navigation }) => {
     useEffect(() => {
         (async () => {
             if (Platform.OS !== 'web') {
-                const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+                const { status } = await ImagePicker.requestCameraPermissionsAsync();
                 if (status !== 'granted') {
-                    Alert.alert('Sorry, we need camera roll permissions to make this work!');
+                    Alert.alert('Sorry, we need camera permissions to make this work!');
                 }
             }
         })();
@@ -26,7 +26,19 @@ const AddProductScreen = ({ navigation }) => {
         });
 
         if (!result.cancelled && result.assets && result.assets.length > 0) {
-            setImage(result.assets[0].uri); // Save local URI to state for display
+            setImage(result.assets[0].uri);
+        }
+    };
+
+    const takePicture = async () => {
+        let result = await ImagePicker.launchCameraAsync({
+            allowsEditing: false,
+            aspect: [4, 3],
+            quality: 1,
+        });
+
+        if (!result.cancelled && result.assets && result.assets.length > 0) {
+            setImage(result.assets[0].uri);
         }
     };
 
@@ -39,18 +51,16 @@ const AddProductScreen = ({ navigation }) => {
         const formData = new FormData();
         formData.append('name', name);
         formData.append('price', price);
-        // Append the image file, React Native handles the binary file inclusion for us
         formData.append('image', {
             uri: image,
-            type: 'image/jpeg', // Or whatever mime type is appropriate for your image
-            name: 'product-image.jpg', // The file's name, could be dynamic
+            type: 'image/jpeg',
+            name: 'product-image.jpg',
         });
 
         try {
-            const response = await fetch(`${NEWNEWSHOPURL}/product/add`, {
+            const response = await fetch(`${NEWNEWNEWSHOPURL}/product/add`, {
                 method: 'POST',
                 headers: {
-                    // Don't set 'Content-Type' here, let the browser set it with the correct boundary
                     Accept: 'application/json',
                 },
                 body: formData,
@@ -62,7 +72,7 @@ const AddProductScreen = ({ navigation }) => {
                 setName('');
                 setPrice('');
                 setImage(null);
-                navigation.goBack(); // or navigation.navigate('Main');
+                navigation.goBack();
             } else {
                 throw new Error(responseData.message || 'Could not add the product.');
             }
@@ -90,6 +100,9 @@ const AddProductScreen = ({ navigation }) => {
             />
             <TouchableOpacity onPress={pickImage} style={styles.button}>
                 <Text>Pick an image from camera roll</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={takePicture} style={styles.button}>
+                <Text>Take a picture</Text>
             </TouchableOpacity>
             {image && (
                 <View style={styles.imageView}>

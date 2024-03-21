@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity, Image, Button, Alert } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
-import { NEWNEWSHOPURL } from '@env'; // Make sure this is the correct URL to your backend
+import { NEWNEWNEWSHOPURL } from '@env'; // Make sure this is the correct URL to your backend
 
 const ShopScreen = ({ navigation }) => {
     const [products, setProducts] = useState([]);
@@ -19,10 +19,9 @@ const ShopScreen = ({ navigation }) => {
 
     const fetchProducts = async () => {
         try {
-            const response = await fetch(`${NEWNEWSHOPURL}/getShop`);
+            const response = await fetch(`${NEWNEWNEWSHOPURL}/getShop`);
             const data = await response.json();
-            console.log("Fetched products:", data); // Debug: Log fetched products to ensure they're being retrieved
-            // Replace backslashes with forward slashes in image URLs
+            console.log("Fetched products:", data);
             const modifiedData = data.map(item => {
                 if (item.image) {
                     return {
@@ -61,7 +60,7 @@ const ShopScreen = ({ navigation }) => {
         try {
             await Promise.all(
                 selectedProducts.map(async productId => {
-                    const response = await fetch(`${NEWNEWSHOPURL}/product/delete/${productId}`, {
+                    const response = await fetch(`${NEWNEWNEWSHOPURL}/product/delete/${productId}`, {
                         method: 'POST',
                     });
                     if (!response.ok) {
@@ -91,7 +90,7 @@ const ShopScreen = ({ navigation }) => {
                 </View>
                 {item.image && (
                     <Image
-                        source={{ uri: `${NEWNEWSHOPURL}/${item.image}` }}
+                        source={{ uri: `${NEWNEWNEWSHOPURL}/${item.image}` }}
                         style={styles.productImage}
                         resizeMode='contain'
                     />
@@ -115,7 +114,7 @@ const ShopScreen = ({ navigation }) => {
             <FlatList
                 data={products}
                 renderItem={renderProductItem}
-                keyExtractor={item => item._id.toString()} // Ensure _id is a string
+                keyExtractor={item => item._id.toString()}
             />
         </View>
     );
@@ -137,11 +136,11 @@ const styles = StyleSheet.create({
         padding: 10,
         borderBottomWidth: 1,
         borderBottomColor: '#ccc',
-        width: '100%', // Ensure item occupies full width
-        position: 'relative', // Needed for absolute positioning of selected indicator
+        width: '100%',
+        position: 'relative',
     },
     productInfo: {
-        flex: 1, // Make sure text doesn't overlap with the image
+        flex: 1,
     },
     productName: {
         fontSize: 18,
@@ -151,9 +150,9 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     productImage: {
-        width: 100, // Set fixed size for the image for uniformity
-        height: 100, // You can adjust width and height as needed
-        marginLeft: 10, // Add some margin between text and image
+        width: 100,
+        height: 100,
+        marginLeft: 10,
     },
     selectedIndicator: {
         position: 'absolute',

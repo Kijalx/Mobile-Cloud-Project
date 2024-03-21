@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, Button, StyleSheet, TouchableOpacity } from 'react-native';
-import { NEWNEWSHOPURL } from '@env';
+import { NEWNEWNEWSHOPURL } from '@env';
 const AdminScreen = ({ navigation }) => {
     const [users, setUsers] = useState([]);
 
@@ -10,7 +10,7 @@ const AdminScreen = ({ navigation }) => {
 
     const fetchUsers = async () => {
         try {
-            const response = await fetch(`${NEWNEWSHOPURL}/getUsers`);
+            const response = await fetch(`${NEWNEWNEWSHOPURL}/getUsers`);
             const data = await response.json();
             if (!response.ok) {
                 throw new Error(data.message || 'Could not fetch users.');
@@ -23,7 +23,7 @@ const AdminScreen = ({ navigation }) => {
 
     const changeUserRole = async (userId, newRole) => {
         try {
-            const response = await fetch(`${NEWNEWSHOPURL}/changeRole/${userId}`, {
+            const response = await fetch(`${NEWNEWNEWSHOPURL}/changeRole/${userId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

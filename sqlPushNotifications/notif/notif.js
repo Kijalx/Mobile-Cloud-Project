@@ -58,7 +58,7 @@ export function sendPushNotification() {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                to: "ExponentPushToken[nIqvwx17cmWM_SE2yZi8JejE6pPZTSZngic_aWQf]",
+                to: "ExponentPushToken[902554b4-ac74-4fe1-a46c-92e50b466475]",
                 title: "Test - sent from a device!",
                 body: "This is a push notification test!",
             }),

@@ -5,7 +5,6 @@ import { AuthContext } from '../auth/AuthContext';
 const MainScreen = ({ navigation }) => {
     const { isLoggedIn, isAdmin } = useContext(AuthContext);
 
-    // Function to navigate to the menu screen
     const goToMenu = () => {
         navigation.navigate('Menu');
     };
@@ -14,7 +13,7 @@ const MainScreen = ({ navigation }) => {
         <View style={styles.container}>
             <Button title="Shop" onPress={() => navigation.navigate('Shop')} />
             <Button title="Add Product" onPress={() => navigation.navigate('AddProduct')} />
-            {!isLoggedIn ? ( // Display Sign Up and Login buttons if not logged in
+            {!isLoggedIn ? (
                 <>
                     <Button title="Sign Up" onPress={() => navigation.navigate('SignUp')} />
                     <Button title="Login" onPress={() => navigation.navigate('Login')} />
@@ -27,9 +26,8 @@ const MainScreen = ({ navigation }) => {
     );
 };
 
-// Navigation options for MainScreen
 MainScreen.navigationOptions = ({ navigation }) => ({
-    headerTitle: 'Main Menu', // Title for the header
+    headerTitle: 'Main Menu',
     headerRight: () => (
         <Button onPress={() => navigation.navigate('Menu')} title="Menu" />
     ),
