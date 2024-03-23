@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { View, TextInput, Button, StyleSheet, Alert } from 'react-native';
-import { NEWNEWNEWSHOPURL } from '@env';
+import { PRIV } from '@env';
 
 const UpdateProductScreen = ({ route, navigation }) => {
-    const { productId, productName, productPrice } = route.params;
-    const [name, setName] = useState(productName);
-    const [price, setPrice] = useState(productPrice.toString());
+    const { productId } = route.params;
+    const [name, setName] = useState(route.params.productName);
+    const [price, setPrice] = useState(route.params.productPrice.toString());
 
     const updateProductHandler = async () => {
         if (!name.trim() || !price) {
@@ -14,22 +14,22 @@ const UpdateProductScreen = ({ route, navigation }) => {
         }
 
         try {
-            const response = await fetch(`${NEWNEWNEWSHOPURL}/product/update/${productId}`, {
+            const response = await fetch(`${PRIV}/product/update/${productId}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
                     name: name,
-                    price: parseFloat(price),
+                    price: parseFloat(price), // Convert price back to a float to ensure backend compatibility
                 }),
             });
 
-            const responseData = await response.json();
             if (!response.ok) {
+                const responseData = await response.json();
                 throw new Error(responseData.message || 'Could not update the product.');
             }
-            navigation.navigate('Shop');
+            navigation.navigate('MyProducts'); // Assuming you want to go back to the list of your products
             Alert.alert('Success', 'Product updated successfully!');
         } catch (error) {
             Alert.alert('An error occurred', error.toString());
@@ -38,14 +38,14 @@ const UpdateProductScreen = ({ route, navigation }) => {
 
     const deleteProductHandler = async () => {
         try {
-            const response = await fetch(`${NEWNEWNEWSHOPURL}/product/delete/${productId}`, {
-                method: 'POST',
+            const response = await fetch(`${PRIV}/product/delete/${productId}`, {
+                method: 'DELETE', // Use the appropriate method for deletion as per your API
             });
 
             if (!response.ok) {
                 throw new Error('Could not delete the product.');
             }
-            navigation.navigate('Shop');
+            navigation.navigate('MyProducts'); // Go back to the product list after deletion
             Alert.alert('Success', 'Product deleted successfully!');
         } catch (error) {
             Alert.alert('An error occurred', error.toString());
@@ -57,13 +57,13 @@ const UpdateProductScreen = ({ route, navigation }) => {
             <TextInput
                 placeholder="Name"
                 value={name}
-                onChangeText={text => setName(text)}
+                onChangeText={setName}
                 style={styles.input}
             />
             <TextInput
                 placeholder="Price"
                 value={price}
-                onChangeText={text => setPrice(text)}
+                onChangeText={setPrice}
                 keyboardType="numeric"
                 style={styles.input}
             />

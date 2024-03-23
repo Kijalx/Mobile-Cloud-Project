@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { View, TextInput, Button, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { AuthContext } from '../auth/AuthContext';
-import { NEWNEWNEWSHOPURL } from '@env';
+import { PRIV } from '@env';
 
 const LoginScreen = ({ navigation }) => {
     const { login, admin } = useContext(AuthContext);
@@ -9,28 +9,30 @@ const LoginScreen = ({ navigation }) => {
     const [password, setPassword] = useState('');
 
     const handleLogin = async () => {
-        try {
-            const response = await fetch(`${NEWNEWNEWSHOPURL}/user/login`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ username, password }),
+    try {
+        const response = await fetch(`${PRIV}/user/login`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username, password }),
+        });
+        if (response.ok) {
+            const userData = await response.json();
+            // Now passing user details to the login function
+            login({
+                isAdmin: userData.isAdmin,
+                username: userData.username // Assuming your API returns a username
             });
-            if (response.ok) {
-                const userData = await response.json();
-                login();
-                if (userData.isAdmin) {
-                    admin(true);
-                }
-                navigation.navigate('Main');
-            } else {
-                console.error('Login failed');
-            }
-        } catch (error) {
-            console.error('Error occurred during login:', error);
+            // Removed the separate admin(true) call as it's now handled within login
+            navigation.navigate('Main');
+        } else {
+            console.error('Login failed');
         }
-    };
+    } catch (error) {
+        console.error('Error occurred during login:', error);
+    }
+};
 
     const handleForgotPassword = () => {
         navigation.navigate('ForgotPassword');

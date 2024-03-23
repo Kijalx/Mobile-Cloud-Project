@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { View, Button, Text, StyleSheet } from 'react-native';
 import { AuthContext } from '../auth/AuthContext';
+import { PRIV } from '@env';
 
 const MainScreen = ({ navigation }) => {
     const { isLoggedIn, isAdmin } = useContext(AuthContext);
@@ -11,13 +12,16 @@ const MainScreen = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
+            <Text>{PRIV}</Text>
             <Button title="Shop" onPress={() => navigation.navigate('Shop')} />
-            <Button title="Add Product" onPress={() => navigation.navigate('AddProduct')} />
             {!isLoggedIn ? (
                 <>
                     <Button title="Sign Up" onPress={() => navigation.navigate('SignUp')} />
                     <Button title="Login" onPress={() => navigation.navigate('Login')} />
                 </>
+            ) : null}
+            {isLoggedIn ? (
+                <Button title="Add Product" onPress={() => navigation.navigate('AddProduct')} />
             ) : null}
             {isLoggedIn && isAdmin ? (
                 <Button title="Admin" onPress={() => navigation.navigate('Admin')} />

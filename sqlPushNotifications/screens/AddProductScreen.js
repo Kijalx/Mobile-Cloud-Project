@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, TextInput, Button, StyleSheet, Alert, TouchableOpacity, Text, Image, Platform } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import { NEWNEWNEWSHOPURL } from '@env';
+import { PRIV } from '@env';
+import { AuthContext } from '../auth/AuthContext';
 
 const AddProductScreen = ({ navigation }) => {
+    const { username } = useContext(AuthContext); // Get username from context
     const [name, setName] = useState('');
     const [price, setPrice] = useState('');
     const [image, setImage] = useState(null);
@@ -51,6 +53,7 @@ const AddProductScreen = ({ navigation }) => {
         const formData = new FormData();
         formData.append('name', name);
         formData.append('price', price);
+        formData.append('username', username); // Add the username to the form data
         formData.append('image', {
             uri: image,
             type: 'image/jpeg',
@@ -58,7 +61,7 @@ const AddProductScreen = ({ navigation }) => {
         });
 
         try {
-            const response = await fetch(`${NEWNEWNEWSHOPURL}/product/add`, {
+            const response = await fetch(`${PRIV}/product/add`, {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
@@ -66,7 +69,6 @@ const AddProductScreen = ({ navigation }) => {
                 body: formData,
             });
 
-            const responseData = await response.json();
             if (response.ok) {
                 Alert.alert('Success', 'Product added successfully!');
                 setName('');
@@ -74,6 +76,7 @@ const AddProductScreen = ({ navigation }) => {
                 setImage(null);
                 navigation.goBack();
             } else {
+                const responseData = await response.json();
                 throw new Error(responseData.message || 'Could not add the product.');
             }
         } catch (error) {
@@ -140,7 +143,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-    image: {
+    image:{
         width: 200,
         height: 200,
         borderRadius: 10,

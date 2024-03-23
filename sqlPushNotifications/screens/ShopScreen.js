@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity, Image, Button, Alert } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
-import { NEWNEWNEWSHOPURL } from '@env'; // Make sure this is the correct URL to your backend
+import { PRIV } from '@env';
+import { AuthContext } from '../auth/AuthContext';
 
 const ShopScreen = ({ navigation }) => {
+    const { isLoggedIn, isAdmin } = useContext(AuthContext);
     const [products, setProducts] = useState([]);
     const [selectedProducts, setSelectedProducts] = useState([]);
 
@@ -19,14 +21,14 @@ const ShopScreen = ({ navigation }) => {
 
     const fetchProducts = async () => {
         try {
-            const response = await fetch(`${NEWNEWNEWSHOPURL}/getShop`);
+            const response = await fetch(`${PRIV}/getShop`);
             const data = await response.json();
             console.log("Fetched products:", data);
             const modifiedData = data.map(item => {
                 if (item.image) {
                     return {
                         ...item,
-                        image: item.image.replace(/\\/g, '/'),
+                        image: item.image.replace(/\\/g, '/')
                     };
                 }
                 return item;
@@ -38,17 +40,17 @@ const ShopScreen = ({ navigation }) => {
     };
 
     const toggleProductSelection = productId => {
-        setSelectedProducts(prevSelectedProducts => {
-            if (prevSelectedProducts.includes(productId)) {
-                return prevSelectedProducts.filter(id => id !== productId);
-            } else {
-                return [...prevSelectedProducts, productId];
-            }
-        });
-    };
-
-    const navigateToUpdateProduct = (productId, productName, productPrice) => {
-        navigation.navigate('UpdateProduct', { productId, productName, productPrice });
+        if (isAdmin) {
+            setSelectedProducts(prevSelectedProducts => {
+                if (prevSelectedProducts.includes(productId)) {
+                    return prevSelectedProducts.filter(id => id !== productId);
+                } else {
+                    return [...prevSelectedProducts, productId];
+                }
+            });
+        } else {
+            Alert.alert('Unauthorized', 'Only admins can select products for deletion.');
+        }
     };
 
     const deleteSelectedProducts = async () => {
@@ -56,11 +58,10 @@ const ShopScreen = ({ navigation }) => {
             Alert.alert('No products selected', 'Please select products to delete.');
             return;
         }
-
         try {
             await Promise.all(
                 selectedProducts.map(async productId => {
-                    const response = await fetch(`${NEWNEWNEWSHOPURL}/product/delete/${productId}`, {
+                    const response = await fetch(`${PRIV}/product/delete/${productId}`, {
                         method: 'POST',
                     });
                     if (!response.ok) {
@@ -80,8 +81,7 @@ const ShopScreen = ({ navigation }) => {
         const isSelected = selectedProducts.includes(item._id);
         return (
             <TouchableOpacity
-                style={styles.productItem}
-                onPress={() => navigateToUpdateProduct(item._id, item.name, item.price)}
+                style={[styles.productItem, isSelected && styles.selectedProduct]}
                 onLongPress={() => toggleProductSelection(item._id)}
             >
                 <View style={styles.productInfo}>
@@ -90,13 +90,10 @@ const ShopScreen = ({ navigation }) => {
                 </View>
                 {item.image && (
                     <Image
-                        source={{ uri: `${NEWNEWNEWSHOPURL}/${item.image}` }}
+                        source={{ uri: `${PRIV}/${item.image}` }}
                         style={styles.productImage}
                         resizeMode='contain'
                     />
-                )}
-                {isSelected && (
-                    <View style={styles.selectedIndicator} />
                 )}
             </TouchableOpacity>
         );
@@ -105,10 +102,16 @@ const ShopScreen = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
+                {isAdmin && (
+                    <Button
+                        title="Delete Selected"
+                        onPress={deleteSelectedProducts}
+                        disabled={selectedProducts.length === 0}
+                    />
+                )}
                 <Button
-                    title="Delete Selected"
-                    onPress={deleteSelectedProducts}
-                    disabled={selectedProducts.length === 0}
+                    title="My Products"
+                    onPress={() => navigation.navigate('MyProducts')}
                 />
             </View>
             <FlatList
@@ -127,7 +130,10 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     header: {
+        flexDirection: 'row',
         marginBottom: 10,
+        justifyContent: 'space-between', // Ensure buttons are spread out
+        width: '100%', // Ensure the header takes the full width
     },
     productItem: {
         flexDirection: 'row',
@@ -139,10 +145,12 @@ const styles = StyleSheet.create({
         width: '100%',
         position: 'relative',
     },
+    selectedProduct: {
+        backgroundColor: 'rgba(0, 0, 255, 0.2)', // Light blue background for selected items
+    },
     productInfo: {
         flex: 1,
-    },
-    productName: {
+    },    productName: {
         fontSize: 18,
         fontWeight: 'bold',
     },
@@ -153,14 +161,6 @@ const styles = StyleSheet.create({
         width: 100,
         height: 100,
         marginLeft: 10,
-    },
-    selectedIndicator: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        bottom: 0,
-        backgroundColor: 'rgba(0, 0, 0, 0.3)',
-        width: 5,
     },
 });
 

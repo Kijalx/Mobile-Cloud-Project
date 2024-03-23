@@ -22,6 +22,7 @@ const productSchema = new Schema({
     image: { type: String, required: false }, // Path to the image
     anArray: { type: Array, required: false },
     anObject: { type: Object, required: false },
+    username: { type: String, required: true },
 });
 
 const Product = mongoose.model("Product", productSchema);
@@ -39,19 +40,34 @@ router.get("/addProduct", (req, res) => {
 });
 
 router.post("/product/add", upload.single('image'), (req, res) => {
-    const { name, price } = req.body;
-    const imagePath = req.file ? req.file.path : ''; // Path to the uploaded image
-    new Product({ name, price, image: imagePath })
+    const { name, price, username } = req.body; // Include username here
+    const imagePath = req.file ? req.file.path : '';
+    new Product({ name, price, image: imagePath, username }) // Include username in the new product
         .save()
-        .then((product) => {
+        .then(product => {
             console.log("Product added successfully");
             res.json(product);
         })
-        .catch((err) => {
+        .catch(err => {
             console.log("Failed to add product: " + err);
             res.status(500).send("Failed to add product");
         });
 });
+
+router.get("/userProducts/:username", (req, res) => {
+    const { username } = req.params;
+    console.log("Fetching products for username:", username); // Debugging line
+    Product.find({ username }) // Find products by username
+        .then(products => {
+            console.log("Products found:", products); // Debugging line
+            res.json(products);
+        })
+        .catch(err => {
+            console.log("Failed to find user products: " + err);
+            res.status(500).send("Failed to find user products");
+        });
+});
+
 
 router.get("/", (req, res) => {
     Product.find()
