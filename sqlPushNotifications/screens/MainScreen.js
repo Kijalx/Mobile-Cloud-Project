@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { View, Button, Text, StyleSheet } from 'react-native';
 import { AuthContext } from '../auth/AuthContext';
-import { PRIV } from '@env';
+import { NEWNEWSHOPURL } from '@env';
 
 const MainScreen = ({ navigation }) => {
     const { isLoggedIn, isAdmin } = useContext(AuthContext);
@@ -12,7 +12,7 @@ const MainScreen = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <Text>{PRIV}</Text>
+            <Text>{NEWNEWSHOPURL}</Text>
             <Button title="Shop" onPress={() => navigation.navigate('Shop')} />
             {!isLoggedIn ? (
                 <>

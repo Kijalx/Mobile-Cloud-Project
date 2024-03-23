@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, TextInput, Button, StyleSheet, Alert } from 'react-native';
-import { PRIV } from '@env';
+import { NEWNEWSHOPURL } from '@env';
 const SignUpScreen = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -12,7 +12,7 @@ const SignUpScreen = ({ navigation }) => {
         }
 
         try {
-            const response = await fetch(`${PRIV}/user/signup`, {
+            const response = await fetch(`${NEWNEWSHOPURL}/user/signup`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, TextInput, Button, StyleSheet, Alert } from 'react-native';
-import { PRIV } from '@env';
+import { NEWNEWSHOPURL } from '@env';
 
 const UpdateProductScreen = ({ route, navigation }) => {
     const { productId } = route.params;
@@ -14,7 +14,7 @@ const UpdateProductScreen = ({ route, navigation }) => {
         }
 
         try {
-            const response = await fetch(`${PRIV}/product/update/${productId}`, {
+            const response = await fetch(`${NEWNEWSHOPURL}/product/update/${productId}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -38,7 +38,7 @@ const UpdateProductScreen = ({ route, navigation }) => {
 
     const deleteProductHandler = async () => {
         try {
-            const response = await fetch(`${PRIV}/product/delete/${productId}`, {
+            const response = await fetch(`${NEWNEWSHOPURL}/product/delete/${productId}`, {
                 method: 'DELETE', // Use the appropriate method for deletion as per your API
             });
 

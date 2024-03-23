@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity, Image, Button, Alert } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
-import { PRIV } from '@env';
+import { NEWNEWSHOPURL } from '@env';
 import { AuthContext } from '../auth/AuthContext';
 
 const ShopScreen = ({ navigation }) => {
@@ -21,7 +21,7 @@ const ShopScreen = ({ navigation }) => {
 
     const fetchProducts = async () => {
         try {
-            const response = await fetch(`${PRIV}/getShop`);
+            const response = await fetch(`${NEWNEWSHOPURL}/getShop`);
             const data = await response.json();
             console.log("Fetched products:", data);
             const modifiedData = data.map(item => {
@@ -61,7 +61,7 @@ const ShopScreen = ({ navigation }) => {
         try {
             await Promise.all(
                 selectedProducts.map(async productId => {
-                    const response = await fetch(`${PRIV}/product/delete/${productId}`, {
+                    const response = await fetch(`${NEWNEWSHOPURL}/product/delete/${productId}`, {
                         method: 'POST',
                     });
                     if (!response.ok) {
@@ -90,7 +90,7 @@ const ShopScreen = ({ navigation }) => {
                 </View>
                 {item.image && (
                     <Image
-                        source={{ uri: `${PRIV}/${item.image}` }}
+                        source={{ uri: `${NEWNEWSHOPURL}/${item.image}` }}
                         style={styles.productImage}
                         resizeMode='contain'
                     />
@@ -109,10 +109,12 @@ const ShopScreen = ({ navigation }) => {
                         disabled={selectedProducts.length === 0}
                     />
                 )}
-                <Button
+                {isLoggedIn && (
+                    <Button
                     title="My Products"
                     onPress={() => navigation.navigate('MyProducts')}
                 />
+                )}
             </View>
             <FlatList
                 data={products}

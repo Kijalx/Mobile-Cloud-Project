@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { View, TextInput, Button, StyleSheet, Alert, TouchableOpacity, Text, Image, Platform } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import { PRIV } from '@env';
+import { NEWNEWSHOPURL } from '@env';
 import { AuthContext } from '../auth/AuthContext';
 
 const AddProductScreen = ({ navigation }) => {
@@ -61,7 +61,7 @@ const AddProductScreen = ({ navigation }) => {
         });
 
         try {
-            const response = await fetch(`${PRIV}/product/add`, {
+            const response = await fetch(`${NEWNEWSHOPURL}/product/add`, {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',

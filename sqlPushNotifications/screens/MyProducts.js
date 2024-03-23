@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { View, FlatList, StyleSheet, Text, TouchableOpacity, Image, Alert } from 'react-native';
 import { AuthContext } from '../auth/AuthContext';
-import { PRIV } from '@env';
+import { NEWNEWSHOPURL } from '@env';
 import { useFocusEffect } from '@react-navigation/native';
 const MyProductsScreen = ({ navigation }) => {
     const { username } = useContext(AuthContext);
@@ -10,7 +10,7 @@ const MyProductsScreen = ({ navigation }) => {
     const fetchMyProducts = async () => {
         if (username) { // Only proceed if username is available
             try {
-                const response = await fetch(`${PRIV}/userProducts/${username}`);
+                const response = await fetch(`${NEWNEWSHOPURL}/userProducts/${username}`);
                 const data = await response.json();
                 if (response.ok) {
                     setMyProducts(data);
@@ -48,7 +48,7 @@ const MyProductsScreen = ({ navigation }) => {
                 </View>
                 {item.image && (
                     <Image
-                        source={{ uri: `${PRIV}/${item.image}` }}
+                        source={{ uri: `${NEWNEWSHOPURL}/${item.image}` }}
                         style={styles.productImage}
                         resizeMode="contain"
                     />
