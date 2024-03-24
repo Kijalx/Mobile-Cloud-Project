@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, View, Button } from "react-native";
+import { StyleSheet, View, TouchableOpacity, Text } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -66,16 +66,12 @@ export default function App() {
         </Stack.Navigator>
       </AuthProvider>
       <View style={styles.notificationButtonsContainer}>
-        <Button
-          title="Schedule Notification"
-          onPress={scheduleNotification()}
-          style={styles.notificationButton}
-        />
-        <Button
-          title="Send Push Notification"
-          onPress={sendPushNotification()}
-          style={styles.notificationButton}
-        />
+      <TouchableOpacity style = {styles.notificationContainer} onPress={scheduleNotification()}>
+          <Text style = {styles.notificationButton}>Schedule Notification</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style = {styles.notificationContainer} onPress={sendPushNotification()}>
+          <Text style = {styles.notificationButton}>Send Push Notification</Text>
+      </TouchableOpacity>
       </View>
       <StatusBar style="auto" />
     </NavigationContainer>
@@ -87,10 +83,19 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 20,
+    marginBottom: 15,
   },
+  notificationContainer: {
+    alignItems: 'center',
+    elevation: 4,
+    borderRadius: 8,
+    backgroundColor: '#a9a9a9',
+    padding: 5,
+    marginLeft: 5,
+    marginBottom:0,
+},
   notificationButton: {
-    fontSize: 12, // Adjust the font size
-    padding: 6, // Adjust the padding
+    fontSize: 15, 
+    padding: 3, 
   },
 });

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, StyleSheet, Alert } from 'react-native';
+import styles from '../styles/SignUpStyle';
+import { View, TextInput, Alert, Text, TouchableOpacity } from 'react-native';
 import { NEWNEWSHOPURL } from '@env';
 const SignUpScreen = ({ navigation }) => {
     const [email, setEmail] = useState('');
@@ -53,25 +54,15 @@ const SignUpScreen = ({ navigation }) => {
                 style={styles.input}
                 secureTextEntry={true}
             />
-            <Button title="Sign Up" onPress={signUpHandler} />
+            <TouchableOpacity onPress={signUpHandler} style={styles.buttonContainer}>
+                <Text style= {styles.buttonText}>Sign Up</Text>
+            </TouchableOpacity>
+            <Text style = {styles.text}>Already have an Account?</Text>
+            <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+                        <Text style = {styles.signUp}>Login?</Text>
+            </TouchableOpacity>
         </View>
     );
 };
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 20,
-    },
-    input: {
-        width: '100%',
-        marginVertical: 10,
-        borderWidth: 1,
-        borderColor: '#ccc',
-        padding: 10,
-    },
-});
 
 export default SignUpScreen;

@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, TextInput, Button, StyleSheet, Alert, TouchableOpacity, Text, Image, Platform } from 'react-native';
+import { View, TextInput, Alert, TouchableOpacity, Text, Image, Platform } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { NEWNEWSHOPURL } from '@env';
+import styles from '../styles/AddProdStyle';
 import { AuthContext } from '../auth/AuthContext';
 
 const AddProductScreen = ({ navigation }) => {
@@ -101,53 +102,22 @@ const AddProductScreen = ({ navigation }) => {
                 keyboardType="numeric"
                 style={styles.input}
             />
-            <TouchableOpacity onPress={pickImage} style={styles.button}>
-                <Text>Pick an image from camera roll</Text>
+            <TouchableOpacity onPress={pickImage} style={styles.buttonContainer}>
+                <Text style= {styles.buttonText}>Pick an image from camera roll</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={takePicture} style={styles.button}>
-                <Text>Take a picture</Text>
+            <TouchableOpacity onPress={takePicture} style={styles.buttonContainer}>
+                <Text style= {styles.buttonText}>Take a picture</Text>
             </TouchableOpacity>
             {image && (
                 <View style={styles.imageView}>
                     <Image source={{ uri: image }} style={styles.image} resizeMode="contain" />
                 </View>
             )}
-            <Button title="Add Product" onPress={addProductHandler} />
+            <TouchableOpacity onPress={addProductHandler} style={styles.buttonContainer}>
+                <Text style= {styles.buttonText}>Add Product</Text>
+            </TouchableOpacity>
         </View>
     );
 };
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 20,
-    },
-    input: {
-        width: '100%',
-        marginVertical: 10,
-        borderWidth: 1,
-        borderColor: '#ccc',
-        padding: 10,
-        color: '#000',
-    },
-    button: {
-        marginBottom: 20,
-        alignItems: 'center',
-        backgroundColor: '#DDDDDD',
-        padding: 10,
-    },
-    imageView: {
-        marginVertical: 15,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    image:{
-        width: 200,
-        height: 200,
-        borderRadius: 10,
-    },
-});
 
 export default AddProductScreen;
