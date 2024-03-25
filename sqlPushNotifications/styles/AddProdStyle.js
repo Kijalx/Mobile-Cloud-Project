@@ -6,6 +6,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         padding: 20,
+        overflow: 'scroll',
     },
     input: {
         width: '100%',
@@ -36,6 +37,14 @@ const styles = StyleSheet.create({
     buttonText: {
         fontSize: 17,
     },
+
+    iconContainer: {
+        backgroundColor: '#a9a9a9',
+        padding: 15,
+        margin: 15,
+        elevation: 4,
+        borderRadius: 4,
+    }
 });
 
 export default styles

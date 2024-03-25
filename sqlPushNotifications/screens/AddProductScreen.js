@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, TextInput, Alert, TouchableOpacity, Text, Image, Platform } from 'react-native';
+import { Icon } from '@rneui/themed';
+import { View, TextInput, Alert, TouchableOpacity, Text, Image, Platform, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { NEWNEWSHOPURL } from '@env';
 import styles from '../styles/AddProdStyle';
@@ -86,37 +87,41 @@ const AddProductScreen = ({ navigation }) => {
     };
 
     return (
-        <View style={styles.container}>
-            <TextInput
-                placeholder="Name"
-                placeholderTextColor="#888"
-                value={name}
-                onChangeText={text => setName(text)}
-                style={styles.input}
-            />
-            <TextInput
-                placeholder="Price"
-                placeholderTextColor="#888"
-                value={price}
-                onChangeText={text => setPrice(text)}
-                keyboardType="numeric"
-                style={styles.input}
-            />
-            <TouchableOpacity onPress={pickImage} style={styles.buttonContainer}>
-                <Text style= {styles.buttonText}>Pick an image from camera roll</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={takePicture} style={styles.buttonContainer}>
-                <Text style= {styles.buttonText}>Take a picture</Text>
-            </TouchableOpacity>
-            {image && (
-                <View style={styles.imageView}>
-                    <Image source={{ uri: image }} style={styles.image} resizeMode="contain" />
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <View style={styles.container}>
+                <TextInput
+                    placeholder="Name"
+                    placeholderTextColor="#888"
+                    value={name}
+                    onChangeText={text => setName(text)}
+                    style={styles.input}
+                />
+                <TextInput
+                    placeholder="Price"
+                    placeholderTextColor="#888"
+                    value={price}
+                    onChangeText={text => setPrice(text)}
+                    keyboardType="numeric"
+                    style={styles.input}
+                />
+                <View style ={{flexDirection:'row'}}>
+                    <TouchableOpacity onPress={pickImage} style={styles.iconContainer}>
+                        <Icon name ='folder-images' type = 'entypo'></Icon>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={takePicture} style={styles.iconContainer}>
+                    <Icon name ='camera' type = 'entypo'></Icon>
+                    </TouchableOpacity>
                 </View>
-            )}
-            <TouchableOpacity onPress={addProductHandler} style={styles.buttonContainer}>
-                <Text style= {styles.buttonText}>Add Product</Text>
-            </TouchableOpacity>
-        </View>
+                {image && (
+                    <View style={styles.imageView}>
+                        <Image source={{ uri: image }} style={styles.image} resizeMode="contain" />
+                    </View>
+                )}
+                <TouchableOpacity onPress={addProductHandler} style={styles.buttonContainer}>
+                    <Text style= {styles.buttonText}>Add Product</Text>
+                </TouchableOpacity>
+            </View>
+        </TouchableWithoutFeedback>
     );
 };
 
