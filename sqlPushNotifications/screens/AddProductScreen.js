@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Icon } from '@rneui/themed';
-import { View, TextInput, Alert, TouchableOpacity, Text, Image, Platform, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { View, TextInput, Alert, TouchableOpacity, Text, Image, Platform, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { NEWNEWSHOPURL } from '@env';
 import styles from '../styles/AddProdStyle';
@@ -87,41 +87,47 @@ const AddProductScreen = ({ navigation }) => {
     };
 
     return (
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <View style={styles.container}>
-                <TextInput
-                    placeholder="Name"
-                    placeholderTextColor="#888"
-                    value={name}
-                    onChangeText={text => setName(text)}
-                    style={styles.input}
-                />
-                <TextInput
-                    placeholder="Price"
-                    placeholderTextColor="#888"
-                    value={price}
-                    onChangeText={text => setPrice(text)}
-                    keyboardType="numeric"
-                    style={styles.input}
-                />
-                <View style ={{flexDirection:'row'}}>
-                    <TouchableOpacity onPress={pickImage} style={styles.iconContainer}>
-                        <Icon name ='folder-images' type = 'entypo'></Icon>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={takePicture} style={styles.iconContainer}>
-                    <Icon name ='camera' type = 'entypo'></Icon>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.container}>
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <View style={styles.container}>
+                    <TextInput
+                        placeholder="Name"
+                        placeholderTextColor="#888"
+                        value={name}
+                        autoFocus={true}
+                        onChangeText={text => setName(text)}
+                        style={styles.input}
+                    />
+                    <TextInput
+                        placeholder="Price"
+                        placeholderTextColor="#888"
+                        value={price}
+                        autoFocus={true}
+                        onChangeText={text => setPrice(text)}
+                        keyboardType="numeric"
+                        style={styles.input}
+                    />
+                    <View style ={{flexDirection:'row'}}>
+                        <TouchableOpacity onPress={pickImage} style={styles.iconContainer}>
+                            <Icon name ='folder-images' type = 'entypo'></Icon>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={takePicture} style={styles.iconContainer}>
+                        <Icon name ='camera' type = 'entypo'></Icon>
+                        </TouchableOpacity>
+                    </View>
+                    {image && (
+                        <View style={styles.imageView}>
+                            <Image source={{ uri: image }} style={styles.image} resizeMode="contain" />
+                        </View>
+                    )}
+                    <TouchableOpacity onPress={addProductHandler} style={styles.buttonContainer}>
+                        <Text style= {styles.buttonText}>Add Product</Text>
                     </TouchableOpacity>
                 </View>
-                {image && (
-                    <View style={styles.imageView}>
-                        <Image source={{ uri: image }} style={styles.image} resizeMode="contain" />
-                    </View>
-                )}
-                <TouchableOpacity onPress={addProductHandler} style={styles.buttonContainer}>
-                    <Text style= {styles.buttonText}>Add Product</Text>
-                </TouchableOpacity>
-            </View>
-        </TouchableWithoutFeedback>
+            </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
     );
 };
 

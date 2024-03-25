@@ -6,10 +6,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         padding: 20,
-        overflow: 'scroll',
     },
     input: {
-        width: '100%',
+        width: 300,
         marginVertical: 10,
         borderWidth: 1,
         borderColor: '#ccc',
