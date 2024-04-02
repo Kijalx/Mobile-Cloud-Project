@@ -27,6 +27,23 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: 'green',
     },
+    buttonAdmin: {
+        alignItems: 'center',
+        elevation: 4,
+        borderRadius: 4,
+        backgroundColor: '#911007',
+        padding: 6,
+        marginBottom: 8,
+    },
+    buttonUser: {
+        alignItems: 'center',
+        elevation: 4,
+        borderRadius: 4,
+        backgroundColor: '#a9a9a9',
+        padding: 6,
+        marginBottom: 8,
+    },
+
 });
 
 export default styles;

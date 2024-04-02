@@ -52,10 +52,10 @@ const AdminScreen = ({ navigation }) => {
                         <View style={styles.userItem}>
                             <Text style={styles.username}>{item.username}</Text>
                             <Text style={styles.role}>{item.isAdmin ? 'Admin' : 'User'}</Text>
-                            <Button
-                                title={item.isAdmin ? 'Demote' : 'Promote'}
-                                onPress={() => changeUserRole(item._id, !item.isAdmin)}
-                            />
+                            <TouchableOpacity onPress={() => changeUserRole(item._id, !item.isAdmin)}
+                                style = {styles.buttonContainer}>
+                            <Text>{item.isAdmin ? 'Demote' : 'Promote'}</Text>
+                            </TouchableOpacity>
                         </View>
                     </TouchableOpacity>
                 )}
