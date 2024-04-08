@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, StyleSheet, Alert } from 'react-native';
-import { NEWNEWSHOPURL } from '@env';
+import styles from '../styles/UpdateProdStyle';
+import { View, TextInput, Alert, Text, TouchableOpacity } from 'react-native';
+import { ABC } from '@env';
 
 const UpdateProductScreen = ({ route, navigation }) => {
     const { productId } = route.params;
@@ -14,7 +15,7 @@ const UpdateProductScreen = ({ route, navigation }) => {
         }
 
         try {
-            const response = await fetch(`${NEWNEWSHOPURL}/product/update/${productId}`, {
+            const response = await fetch(`${ABC}/product/update/${productId}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -38,7 +39,7 @@ const UpdateProductScreen = ({ route, navigation }) => {
 
     const deleteProductHandler = async () => {
         try {
-            const response = await fetch(`${NEWNEWSHOPURL}/product/delete/${productId}`, {
+            const response = await fetch(`${ABC}/product/delete/${productId}`, {
                 method: 'DELETE', // Use the appropriate method for deletion as per your API
             });
 
@@ -54,6 +55,8 @@ const UpdateProductScreen = ({ route, navigation }) => {
 
     return (
         <View style={styles.container}>
+            <Text>Update the Name and Price of the Product Here</Text>
+
             <TextInput
                 placeholder="Name"
                 value={name}
@@ -67,26 +70,14 @@ const UpdateProductScreen = ({ route, navigation }) => {
                 keyboardType="numeric"
                 style={styles.input}
             />
-            <Button title="Update Product" onPress={updateProductHandler} />
-            <Button title="Delete Product" onPress={deleteProductHandler} color="red" />
+            <TouchableOpacity onPress={updateProductHandler} style={styles.buttonContainer}>
+                <Text style= {styles.buttonText}>Update Product</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={deleteProductHandler} style={styles.buttonContainerDelete}>
+                <Text style= {styles.buttonText}>Delete Product</Text>
+            </TouchableOpacity>
         </View>
     );
 };
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 20,
-    },
-    input: {
-        width: '100%',
-        marginVertical: 10,
-        borderWidth: 1,
-        borderColor: '#ccc',
-        padding: 10,
-    },
-});
 
 export default UpdateProductScreen;

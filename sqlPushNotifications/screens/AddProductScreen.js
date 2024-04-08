@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, TextInput, Button, StyleSheet, Alert, TouchableOpacity, Text, Image, Platform } from 'react-native';
+import { Icon } from '@rneui/themed';
+import { View, TextInput, Alert, TouchableOpacity, Text, Image, Platform, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import { NEWNEWSHOPURL } from '@env';
+import { ABC } from '@env';
+import styles from '../styles/AddProdStyle';
 import { AuthContext } from '../auth/AuthContext';
 
 const AddProductScreen = ({ navigation }) => {
@@ -61,7 +63,7 @@ const AddProductScreen = ({ navigation }) => {
         });
 
         try {
-            const response = await fetch(`${NEWNEWSHOPURL}/product/add`, {
+            const response = await fetch(`${ABC}/product/add`, {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
@@ -85,69 +87,48 @@ const AddProductScreen = ({ navigation }) => {
     };
 
     return (
-        <View style={styles.container}>
-            <TextInput
-                placeholder="Name"
-                placeholderTextColor="#888"
-                value={name}
-                onChangeText={text => setName(text)}
-                style={styles.input}
-            />
-            <TextInput
-                placeholder="Price"
-                placeholderTextColor="#888"
-                value={price}
-                onChangeText={text => setPrice(text)}
-                keyboardType="numeric"
-                style={styles.input}
-            />
-            <TouchableOpacity onPress={pickImage} style={styles.button}>
-                <Text>Pick an image from camera roll</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={takePicture} style={styles.button}>
-                <Text>Take a picture</Text>
-            </TouchableOpacity>
-            {image && (
-                <View style={styles.imageView}>
-                    <Image source={{ uri: image }} style={styles.image} resizeMode="contain" />
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.container}>
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <View style={styles.container}>
+                    <TextInput
+                        placeholder="Name"
+                        placeholderTextColor="#888"
+                        value={name}
+                        autoFocus={true}
+                        onChangeText={text => setName(text)}
+                        style={styles.input}
+                    />
+                    <TextInput
+                        placeholder="Price"
+                        placeholderTextColor="#888"
+                        value={price}
+                        autoFocus={true}
+                        onChangeText={text => setPrice(text)}
+                        keyboardType="numeric"
+                        style={styles.input}
+                    />
+                    <View style ={{flexDirection:'row'}}>
+                        <TouchableOpacity onPress={pickImage} style={styles.iconContainer}>
+                            <Icon name ='folder-images' type = 'entypo'></Icon>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={takePicture} style={styles.iconContainer}>
+                        <Icon name ='camera' type = 'entypo'></Icon>
+                        </TouchableOpacity>
+                    </View>
+                    {image && (
+                        <View style={styles.imageView}>
+                            <Image source={{ uri: image }} style={styles.image} resizeMode="contain" />
+                        </View>
+                    )}
+                    <TouchableOpacity onPress={addProductHandler} style={styles.buttonContainer}>
+                        <Text style= {styles.buttonText}>Add Product</Text>
+                    </TouchableOpacity>
                 </View>
-            )}
-            <Button title="Add Product" onPress={addProductHandler} />
-        </View>
+            </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
     );
 };
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 20,
-    },
-    input: {
-        width: '100%',
-        marginVertical: 10,
-        borderWidth: 1,
-        borderColor: '#ccc',
-        padding: 10,
-        color: '#000',
-    },
-    button: {
-        marginBottom: 20,
-        alignItems: 'center',
-        backgroundColor: '#DDDDDD',
-        padding: 10,
-    },
-    imageView: {
-        marginVertical: 15,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    image:{
-        width: 200,
-        height: 200,
-        borderRadius: 10,
-    },
-});
 
 export default AddProductScreen;

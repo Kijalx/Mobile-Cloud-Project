@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, FlatList, StyleSheet, Text, TouchableOpacity, Image, Alert } from 'react-native';
+import styles from '../styles/MyProductStyle';
+import { View, FlatList, Text, TouchableOpacity, Image, Alert } from 'react-native';
 import { AuthContext } from '../auth/AuthContext';
-import { NEWNEWSHOPURL } from '@env';
+import { ABC } from '@env';
 import { useFocusEffect } from '@react-navigation/native';
 const MyProductsScreen = ({ navigation }) => {
     const { username } = useContext(AuthContext);
@@ -10,7 +11,7 @@ const MyProductsScreen = ({ navigation }) => {
     const fetchMyProducts = async () => {
         if (username) { // Only proceed if username is available
             try {
-                const response = await fetch(`${NEWNEWSHOPURL}/userProducts/${username}`);
+                const response = await fetch(`${ABC}/userProducts/${username}`);
                 const data = await response.json();
                 if (response.ok) {
                     setMyProducts(data);
@@ -48,7 +49,7 @@ const MyProductsScreen = ({ navigation }) => {
                 </View>
                 {item.image && (
                     <Image
-                        source={{ uri: `${NEWNEWSHOPURL}/${item.image}` }}
+                        source={{ uri: `${ABC}/${item.image}` }}
                         style={styles.productImage}
                         resizeMode="contain"
                     />
@@ -67,36 +68,5 @@ const MyProductsScreen = ({ navigation }) => {
         </View>
     );
 };
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        padding: 20,
-    },
-    productItem: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        padding: 10,
-        borderBottomWidth: 1,
-        borderBottomColor: '#ccc',
-        marginBottom: 10, // Added margin for spacing between items
-    },
-    productName: {
-        fontSize: 18,
-        fontWeight: 'bold',
-    },
-    productPrice: {
-        fontSize: 16,
-    },
-    productImage: {
-        width: 100,
-        height: 100,
-        borderRadius: 8,
-        marginLeft: 10, // Ensure some space between the text and the image
-    },
-    // Removed button and buttonText styles as they are no longer needed
-});
 
 export default MyProductsScreen;

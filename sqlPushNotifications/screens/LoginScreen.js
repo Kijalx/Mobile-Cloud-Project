@@ -1,7 +1,8 @@
 import React, { useState, useContext } from 'react';
-import { View, TextInput, Button, StyleSheet, TouchableOpacity, Text } from 'react-native';
+import styles from '../styles/LoginStyle'
+import { View, TextInput, TouchableOpacity, Text } from 'react-native';
 import { AuthContext } from '../auth/AuthContext';
-import { NEWNEWSHOPURL } from '@env';
+import { ABC } from '@env';
 
 const LoginScreen = ({ navigation }) => {
     const { login, admin } = useContext(AuthContext);
@@ -10,7 +11,7 @@ const LoginScreen = ({ navigation }) => {
 
     const handleLogin = async () => {
     try {
-        const response = await fetch(`${NEWNEWSHOPURL}/user/login`, {
+        const response = await fetch(`${ABC}/user/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -55,32 +56,18 @@ const LoginScreen = ({ navigation }) => {
                 value={password}
                 secureTextEntry
             />
-            <Button title="Login" onPress={handleLogin} />
+            <TouchableOpacity onPress={handleLogin} style={styles.buttonContainer}>
+                <Text style= {styles.buttonText}>Login</Text>
+            </TouchableOpacity>
             <TouchableOpacity onPress={handleForgotPassword}>
                 <Text style={styles.forgotPassword}>Forgot Password?</Text>
+            </TouchableOpacity>
+            <Text style = {styles.text}>Don't have an Account?</Text>
+            <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
+                        <Text style = {styles.forgotPassword}>Sign Up</Text>
             </TouchableOpacity>
         </View>
     );
 };
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    input: {
-        width: '80%',
-        marginBottom: 10,
-        padding: 10,
-        borderWidth: 1,
-        borderColor: '#ccc',
-        color: '#000',
-    },
-    forgotPassword: {
-        marginTop: 10,
-        color: 'blue',
-    },
-});
 
 export default LoginScreen;
