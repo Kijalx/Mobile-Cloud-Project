@@ -23,7 +23,8 @@ const styles = StyleSheet.create({
         elevation: 5,
     },
     imageSlot: {
-        width: 50
+        width: 200,
+        height: 200,
     },
     textStyle: {
         color: 'black',

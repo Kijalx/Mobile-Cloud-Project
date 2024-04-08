@@ -1,16 +1,17 @@
 import React, { useState, useEffect, useContext } from 'react';
-import styles from '../styles/ShopStyle';
 import { View, Text, FlatList, TouchableOpacity, Image, Alert, Modal } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
-import { NEWNEWSHOPURL } from '@env';
+import { ABC } from '@env';
 import { AuthContext } from '../auth/AuthContext';
-import DetailModal from './ProductDetailsScreen'
+import DetailModal from './ProductDetailsScreen';
+import styles from '../styles/ShopStyle';
 
 const ShopScreen = ({ navigation }) => {
     const { isLoggedIn, isAdmin } = useContext(AuthContext);
     const [products, setProducts] = useState([]);
     const [selectedProducts, setSelectedProducts] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
+    const [selectedItem, setSelectedItem] = useState(null);
 
     useEffect(() => {
         fetchProducts();
@@ -24,19 +25,12 @@ const ShopScreen = ({ navigation }) => {
 
     const fetchProducts = async () => {
         try {
-            const response = await fetch(`${NEWNEWSHOPURL}/getShop`);
+            const response = await fetch(`${ABC}/getShop`);
             const data = await response.json();
-            console.log("Fetched products:", data);
-            const modifiedData = data.map(item => {
-                if (item.image) {
-                    return {
-                        ...item,
-                        image: item.image.replace(/\\/g, '/')
-                    };
-                }
-                return item;
-            });
-            setProducts(modifiedData);
+            setProducts(data.map(item => ({
+                ...item,
+                image: item.image ? item.image.replace(/\\/g, '/') : null,
+            })));
         } catch (error) {
             console.error('Error fetching products:', error);
         }
@@ -44,13 +38,11 @@ const ShopScreen = ({ navigation }) => {
 
     const toggleProductSelection = productId => {
         if (isAdmin) {
-            setSelectedProducts(prevSelectedProducts => {
-                if (prevSelectedProducts.includes(productId)) {
-                    return prevSelectedProducts.filter(id => id !== productId);
-                } else {
-                    return [...prevSelectedProducts, productId];
-                }
-            });
+            setSelectedProducts(prevSelectedProducts =>
+                prevSelectedProducts.includes(productId) ?
+                prevSelectedProducts.filter(id => id !== productId) :
+                [...prevSelectedProducts, productId]
+            );
         } else {
             Alert.alert('Unauthorized', 'Only admins can select products for deletion.');
         }
@@ -62,16 +54,14 @@ const ShopScreen = ({ navigation }) => {
             return;
         }
         try {
-            await Promise.all(
-                selectedProducts.map(async productId => {
-                    const response = await fetch(`${NEWNEWSHOPURL}/product/delete/${productId}`, {
-                        method: 'POST',
-                    });
-                    if (!response.ok) {
-                        throw new Error(`Failed to delete product with ID ${productId}`);
-                    }
-                })
-            );
+            await Promise.all(selectedProducts.map(async productId => {
+                const response = await fetch(`${ABC}/product/delete/${productId}`, {
+                    method: 'POST',
+                });
+                if (!response.ok) {
+                    throw new Error(`Failed to delete product with ID ${productId}`);
+                }
+            }));
             fetchProducts();
             setSelectedProducts([]);
             Alert.alert('Success', 'Selected products deleted successfully!');
@@ -81,9 +71,9 @@ const ShopScreen = ({ navigation }) => {
     };
 
     const toggleModal = (item) => {
-        setSelectedProducts(item)
-        setModalVisible(true)
-    }
+        setSelectedItem(item);
+        setModalVisible(true);
+    };
 
     const renderProductItem = ({ item }) => {
         const isSelected = selectedProducts.includes(item._id);
@@ -92,7 +82,7 @@ const ShopScreen = ({ navigation }) => {
             <TouchableOpacity
                 style={[styles.productItem, isSelected && styles.selectedIndicator]}
                 onLongPress={() => toggleProductSelection(item._id)}
-                onPress={() => toggleModal(item._id)}
+                onPress={() => toggleModal(item)}
             >
                 <View style={styles.productInfo}>
                     <Text style={styles.productName}>{item.name}</Text>
@@ -100,7 +90,7 @@ const ShopScreen = ({ navigation }) => {
                 </View>
                 {item.image && (
                     <Image
-                        source={{ uri: `${NEWNEWSHOPURL}/${item.image}` }}
+                        source={{ uri: `${ABC}/${item.image}` }}
                         style={styles.productImage}
                         resizeMode='cover'
                     />
@@ -111,31 +101,22 @@ const ShopScreen = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <View style={styles.header}>
-                {isAdmin && (
-                    <TouchableOpacity style={styles.buttonContainer} disabled={selectedProducts.length === 0} onPress={deleteSelectedProducts}>
-                        <Text style={styles.buttonText}>Delete Selected</Text>
-                    </TouchableOpacity>
-                )}
-                {isLoggedIn && (
-                    <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate('MyProducts')}>
-                        <Text style={styles.buttonText}>My Products</Text>
-                    </TouchableOpacity>
-                )}
-            </View>
             <FlatList
                 data={products}
                 renderItem={renderProductItem}
                 keyExtractor={item => item._id.toString()}
             />
-            {modalVisible && selectedProducts &&(
+            {modalVisible && selectedItem && (
                 <DetailModal
-                    item={selectedProducts}
-                    closeModal={() => setModalVisible(false)}
+                    item={selectedItem}
+                    isOpen={modalVisible}
+                    closeModal={() => {
+                        setModalVisible(false);
+                        setSelectedItem(null);
+                    }}
                 />
             )}
         </View>
     );
 };
-
 export default ShopScreen;

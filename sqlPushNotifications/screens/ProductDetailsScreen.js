@@ -1,67 +1,56 @@
-import React from 'react';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, Image, Modal } from 'react-native';
 import styles from '../styles/ProductDetailStyle';
-import { NEWNEWSHOPURL } from '@env';
+import { ABC } from '@env';
 
-const DetailModal = (props) => {
-    const { item, isOpen, closeModal } = props;
-    const [products, setProducts] = useState([]);
+const DetailModal = ({ item, isOpen, closeModal }) => {
+    const [product, setProduct] = useState(null);
 
-    const fetchProductById = async (item) => {
+    const fetchProductById = async () => {
+        if (!item || !item._id) return; // Ensure item and item._id are valid
         try {
-            const response = await fetch(`${NEWNEWSHOPURL}/getShop/${item}`);
+            const url = `${ABC}/getSpecificProduct/${item._id}`;
+            const response = await fetch(url);
             const data = await response.json();
-            console.log("Fetched products by id:", data);
-            const modifiedData = data.map(item => {
-                if (item.image) {
-                    return {
-                        ...item,
-                        image: item.image.replace(/\\/g, '/')
-                    };
-                }
-                return item;
+            const imageUrl = data.image ? `${ABC}/${data.image.replace(/\\/g, '/')}` : null;
+            setProduct({
+                ...data,
+                image: imageUrl, // Store the complete image URL here
             });
-            setProducts([modifiedData]);
+            console.log(imageUrl);
         } catch (error) {
-            console.error('Error fetching products:', error);
+            console.error('Error fetching product:', error);
         }
     };
 
     useEffect(() => {
-        if (item) {
-            fetchProductById(item._id);
-        }
+        fetchProductById();
     }, [item]);
 
     return (
-        <Modal
-            animationType="fade"
-            transparent={true}
-            visible={isOpen}
-            onRequestClose={closeModal}>
+        <Modal animationType="fade" transparent={true} visible={isOpen} onRequestClose={closeModal}>
             <View style={styles.centeredView}>
                 <View style={styles.modalView}>
-                    <View style={styles.productInfo}>
-                        {item.image && (
-                            <Image
-                                source={{ uri: `${NEWNEWSHOPURL}/${item.image}` }}
-                                style={styles.imageSlot}
-                                resizeMode='cover'
-                            />
-                        )}
-                        <Text style={styles.textStyle}>{item.name}</Text>
-                        <Text style={styles.textStyle}>€{item.price}</Text>
-                    </View>
-                    <TouchableOpacity
-                        style={styles.buttonContainer}
-                        onPress={closeModal}>
+                    {product && (
+                        <View style={styles.productInfo}>
+                            {product.image ? (
+                                <>
+                                <Image source={{ uri: product.image }} style={styles.imageSlot} resizeMode="cover" />
+                                </>
+                            ) : (
+                                <Text style={styles.textStyle}>Image not available</Text>
+                            )}
+                            <Text style={styles.textStyle}>{product.name}</Text>
+                            <Text style={styles.textStyle}>€{product.price}</Text>
+                        </View>
+                    )}
+                    <TouchableOpacity style={styles.buttonContainer} onPress={closeModal}>
                         <Text style={styles.buttonText}>Hide Details</Text>
                     </TouchableOpacity>
                 </View>
             </View>
         </Modal>
     );
-}
+};
 
 export default DetailModal;

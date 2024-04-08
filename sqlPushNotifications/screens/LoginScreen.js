@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import styles from '../styles/LoginStyle'
 import { View, TextInput, TouchableOpacity, Text } from 'react-native';
 import { AuthContext } from '../auth/AuthContext';
-import { NEWNEWSHOPURL } from '@env';
+import { ABC } from '@env';
 
 const LoginScreen = ({ navigation }) => {
     const { login, admin } = useContext(AuthContext);
@@ -11,7 +11,7 @@ const LoginScreen = ({ navigation }) => {
 
     const handleLogin = async () => {
     try {
-        const response = await fetch(`${NEWNEWSHOPURL}/user/login`, {
+        const response = await fetch(`${ABC}/user/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

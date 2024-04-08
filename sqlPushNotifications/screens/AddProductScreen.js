@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Icon } from '@rneui/themed';
 import { View, TextInput, Alert, TouchableOpacity, Text, Image, Platform, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import { NEWNEWSHOPURL } from '@env';
+import { ABC } from '@env';
 import styles from '../styles/AddProdStyle';
 import { AuthContext } from '../auth/AuthContext';
 
@@ -63,7 +63,7 @@ const AddProductScreen = ({ navigation }) => {
         });
 
         try {
-            const response = await fetch(`${NEWNEWSHOPURL}/product/add`, {
+            const response = await fetch(`${ABC}/product/add`, {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',

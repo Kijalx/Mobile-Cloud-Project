@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import styles from '../styles/MainStyle';
 import { View, Button, Text, TouchableOpacity } from 'react-native';
 import { AuthContext } from '../auth/AuthContext';
-import { NEWNEWSHOPURL } from '@env';
+import { ABC } from '@env';
 
 const MainScreen = ({ navigation }) => {
     const { isLoggedIn, isAdmin } = useContext(AuthContext);
@@ -13,7 +13,7 @@ const MainScreen = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <Text>{NEWNEWSHOPURL}</Text>
+            <Text>{ABC}</Text>
             <TouchableOpacity style = {styles.buttonContainer} onPress={() => navigation.navigate("Shop")}>
                 <Text style = {styles.buttonText}>Shop</Text>
             </TouchableOpacity>
