@@ -3,8 +3,10 @@ import { Platform, Alert } from "react-native";
 import * as Notifications from "expo-notifications";
 
 export function configurePushNotifications() {
+    console.log("configuring push notifications")
     useEffect(() => {
         async function setupNotifications() {
+            console.log("configuring push notifications")
             const { status } = await Notifications.getPermissionsAsync();
             let finalStatus = status;
 
@@ -35,6 +37,7 @@ export function configurePushNotifications() {
 
 export function scheduleNotification() {
     async function scheduleNotificationHandler() {
+        console.log("Scheduling notification")
         await Notifications.scheduleNotificationAsync({
             content: {
                 title: "My first local notification",
