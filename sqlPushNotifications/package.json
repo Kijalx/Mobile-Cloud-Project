@@ -28,7 +28,8 @@
     "react-native-image-picker": "^7.1.1",
     "react-native-material-dropdown": "^0.11.1",
     "react-native-web": "~0.19.6",
-    "rneui": "^1.0.0-stable.0"
+    "rneui": "^1.0.0-stable.0",
+    "react-native-gesture-handler": "~2.14.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

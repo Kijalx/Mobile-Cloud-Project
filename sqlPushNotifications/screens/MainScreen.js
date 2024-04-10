@@ -5,7 +5,7 @@ import { AuthContext } from '../auth/AuthContext';
 import { ABC } from '@env';
 
 const MainScreen = ({ navigation }) => {
-    const { isLoggedIn, isAdmin } = useContext(AuthContext);
+    const { isLoggedIn, isAdmin, logout } = useContext(AuthContext);
 
     const goToMenu = () => {
         navigation.navigate('Menu');
@@ -25,9 +25,14 @@ const MainScreen = ({ navigation }) => {
                 </>
             ) : null}
             {isLoggedIn ? (
-                <TouchableOpacity style = {styles.buttonContainer} onPress={() => navigation.navigate("AddProduct")}>
-                    <Text style = {styles.buttonText}>Add Product</Text>
-                </TouchableOpacity> 
+                <>
+                    <TouchableOpacity style = {styles.buttonContainer} onPress={() => navigation.navigate("AddProduct")}>
+                        <Text style = {styles.buttonText}>Add Product</Text>
+                    </TouchableOpacity> 
+                    <TouchableOpacity style = {styles.buttonContainer} onPress={logout}>
+                        <Text style = {styles.buttonText}>Logout</Text>
+                    </TouchableOpacity>
+                </> 
             ) : null}
             {isLoggedIn && isAdmin ? (
                 <TouchableOpacity style = {styles.buttonContainer} onPress={() => navigation.navigate("Admin")}>
