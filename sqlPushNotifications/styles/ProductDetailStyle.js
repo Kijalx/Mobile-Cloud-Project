@@ -9,30 +9,34 @@ const styles = StyleSheet.create({
     },
     modalView: {
         margin: 20,
-        backgroundColor: 'white',
+        backgroundColor: '#ffffff',
         borderRadius: 15,
-        padding: 35,
+        padding: 20,
         alignItems: 'center',
         shadowColor: '#000',
         shadowOffset: {
-            width: 0,
-            height: 2,
+            width: 2,
+            height: 3,
         },
-        shadowOpacity: 0.25,
+        shadowOpacity: 0.5,
         shadowRadius: 4,
-        elevation: 5,
+        elevation: 8,
     },
     imageSlot: {
-        width: 200,
-        height: 200,
+        borderRadius: 12,
+        width: 300,
+        height: 300,
     },
     textStyle: {
         color: 'black',
         fontWeight: 'bold',
         textAlign: 'center',
+        fontSize: 20,
+        marginBottom: 15,
+        marginTop: 10
     },
     modalText: {
-        marginBottom: 15,
+        marginBottom: 20,
         textAlign: 'center',
     },
 

@@ -45,7 +45,7 @@ const MyProductsScreen = ({ navigation }) => {
             >
                 <View style={{ flex: 1 }}>
                     <Text style={styles.productName}>{item.name}</Text>
-                    <Text style={styles.productPrice}>${item.price}</Text>
+                    <Text style={styles.productPrice}>€{item.price}</Text>
                 </View>
                 {item.image && (
                     <Image

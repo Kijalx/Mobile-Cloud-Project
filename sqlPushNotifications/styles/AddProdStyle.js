@@ -12,8 +12,9 @@ const styles = StyleSheet.create({
         marginVertical: 10,
         borderWidth: 1,
         borderColor: '#ccc',
+        borderRadius: 5,
         padding: 10,
-        color: '#000',
+        backgroundColor: '#fff',
     },
     imageView: {
         marginVertical: 15,
@@ -21,7 +22,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     image: {
-        width: 200,
+        borderColor: '#ccc',
+        borderWidth: 4,
+        width: 300,
         height: 200,
         borderRadius: 10,
     },
@@ -30,17 +33,16 @@ const styles = StyleSheet.create({
         elevation: 4,
         borderRadius: 4,
         backgroundColor: '#a9a9a9',
-        padding: 6,
+        padding: 8,
         marginBottom: 8,
     },
     buttonText: {
-        fontSize: 17,
+        fontSize: 18,
     },
-
     iconContainer: {
         backgroundColor: '#a9a9a9',
-        padding: 15,
-        margin: 15,
+        padding: 14,
+        margin: 10,
         elevation: 4,
         borderRadius: 4,
     }

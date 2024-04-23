@@ -17,7 +17,6 @@ const DetailModal = ({ item, isOpen, closeModal }) => {
                 ...data,
                 image: imageUrl, // Store the complete image URL here
             });
-            console.log(imageUrl);
         } catch (error) {
             console.error('Error fetching product:', error);
         }
@@ -40,8 +39,8 @@ const DetailModal = ({ item, isOpen, closeModal }) => {
                             ) : (
                                 <Text style={styles.textStyle}>Image not available</Text>
                             )}
-                            <Text style={styles.textStyle}>{product.name}</Text>
-                            <Text style={styles.textStyle}>€{product.price}</Text>
+                            <Text style={styles.textStyle}>Name: {product.name}</Text>
+                            <Text style={styles.textStyle}>Price: €{product.price}</Text>
                         </View>
                     )}
                     <TouchableOpacity style={styles.buttonContainer} onPress={closeModal}>

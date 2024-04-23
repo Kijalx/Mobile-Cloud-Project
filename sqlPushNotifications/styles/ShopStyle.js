@@ -4,10 +4,14 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
-        padding: 20,
+        padding: 10,
     },
     header: {
-        marginBottom: 10,
+        paddingBottom: 10,
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        borderBottomWidth: 1,
+        borderBottomColor: '#ccc',
     },
     productItem: {
         flexDirection: 'row',
@@ -38,15 +42,14 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(130, 135, 143, 0.2)'
     },
     buttonContainer: {
-        alignItems: 'center',
-        elevation: 4,
+        elevation: 8,
         borderRadius: 8,
         backgroundColor: '#a9a9a9',
         padding: 6,
-        marginBottom: 5,
+        height: 40
     },
     buttonText: {
-        fontSize: 15,
+        fontSize: 18,
     },
 });
 
